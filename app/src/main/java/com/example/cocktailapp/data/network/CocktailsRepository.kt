@@ -16,7 +16,7 @@ interface CocktailRepository {
 
 }
 
-class CocktailsRepository @Inject constructor(private val api: CocktailsApi) : CocktailRepository {
+class CocktailRepositoryImp @Inject constructor(private val api: CocktailsApi) : CocktailRepository {
 
 
     override fun getListCocktails(): Flow<UIState<CocktailModel>> = flow {
@@ -25,7 +25,7 @@ class CocktailsRepository @Inject constructor(private val api: CocktailsApi) : C
             val response = api.getAllCocktails()
             if (response.isSuccessful) {
                 response.body()?.let {
-                    Log.d(TAG, "getListCocktails: ${it.drinks}")
+                    Log.d(TAG, "getListCocktails: $it")
                     emit(UIState.SUCCESS(it))
                 } ?: throw NullResponse()
             } else

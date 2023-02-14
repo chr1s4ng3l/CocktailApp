@@ -13,8 +13,8 @@ interface CocktailsApi {
     companion object {
         //www.thecocktaildb.com/api/json/v1/1/search.php?s=
 
-        const val BASE_URL = "www.thecocktaildb.com/api/json/v1/1/"
-        const val PATH = "search.php?s="
+        const val BASE_URL = "http://www.thecocktaildb.com/api/json/v1/1/"
+        const val PATH = "search.php?s=a"
 
     }
 }

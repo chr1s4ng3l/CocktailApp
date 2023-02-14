@@ -7,4 +7,6 @@
     <string name="cocktailimage">cocktailImage</string>
     <string name="tequila">Tequila</string>
     <string name="tequila_blanco_cristalino">Tequila blanco cristalino</string>
+    <string name="ingredients">INGREDIENTS</string>
+    <string name="instructions">INSTRUCTIONS</string>
 </resources>

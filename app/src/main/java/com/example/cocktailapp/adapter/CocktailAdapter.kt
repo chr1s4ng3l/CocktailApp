@@ -15,7 +15,7 @@ class CocktailAdapter(
 ) : RecyclerView.Adapter<CocktailViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateItems(newItems: List<Drink>, context: Context) {
+    fun updateItems(newItems: List<Drink>) {
         if (itemSet != newItems) {
             itemSet.clear()
             itemSet.addAll(newItems)

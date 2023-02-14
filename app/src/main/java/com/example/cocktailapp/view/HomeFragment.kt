@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cocktailapp.R
 import com.example.cocktailapp.adapter.CocktailAdapter
@@ -27,6 +28,15 @@ class HomeFragment : BaseFragment() {
     private val cocktailAdapter by lazy {
         CocktailAdapter {
 
+            cocktailViewModel.title = it.strDrink.toString()
+            cocktailViewModel.image = it.strDrinkThumb.toString()
+            cocktailViewModel.ingredient1 = it.strIngredient1.toString()
+            cocktailViewModel.ingredient2 = it.strIngredient2.toString()
+            cocktailViewModel.ingredient3 = it.strIngredient3.toString()
+            cocktailViewModel.instructions1 = it.strInstructions.toString()
+            cocktailViewModel.title = it.strDrink.toString()
+
+          findNavController().navigate(R.id.action_home_to_details)
         }
     }
 
@@ -68,8 +78,7 @@ class HomeFragment : BaseFragment() {
                 is UIState.SUCCESS<CocktailModel> -> {
                     Log.d(TAG, "onCreateView: ${state.response}")
                     cocktailAdapter.updateItems(
-                        state.response.drinks ?: emptyList(),
-                        requireContext()
+                        state.response.drinks ?: emptyList()
                     )
                 }
                 is UIState.ERROR -> {

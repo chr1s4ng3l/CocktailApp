@@ -1,0 +1,258 @@
+Index: app/src/main/java/com/example/cocktailapp/view/DetailsFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cocktailapp.view\n\nimport android.os.Bundle\nimport androidx.fragment.app.Fragment\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport com.example.cocktailapp.R\nimport com.example.cocktailapp.databinding.FragmentDetailsBinding\nimport dagger.hilt.android.AndroidEntryPoint\n\n\n@AndroidEntryPoint\nclass DetailsFragment : BaseFragment() {\n\n    private val binding: FragmentDetailsBinding by lazy {\n        FragmentDetailsBinding.inflate(layoutInflater)\n    }\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n\n    }\n\n    override fun onCreateView(\n        inflater: LayoutInflater, container: ViewGroup?,\n        savedInstanceState: Bundle?\n    ): View? {\n\n\n\n\n\n\n\n        // Inflate the layout for this fragment\n        return binding.root\n    }\n\n}
+===================================================================
+diff --git a/app/src/main/java/com/example/cocktailapp/view/DetailsFragment.kt b/app/src/main/java/com/example/cocktailapp/view/DetailsFragment.kt
+--- a/app/src/main/java/com/example/cocktailapp/view/DetailsFragment.kt	
++++ b/app/src/main/java/com/example/cocktailapp/view/DetailsFragment.kt	
+@@ -1,5 +1,6 @@
+ package com.example.cocktailapp.view
+ 
++import android.annotation.SuppressLint
+ import android.os.Bundle
+ import androidx.fragment.app.Fragment
+ import android.view.LayoutInflater
+@@ -7,6 +8,7 @@
+ import android.view.ViewGroup
+ import com.example.cocktailapp.R
+ import com.example.cocktailapp.databinding.FragmentDetailsBinding
++import com.squareup.picasso.Picasso
+ import dagger.hilt.android.AndroidEntryPoint
+ 
+ 
+@@ -22,12 +24,19 @@
+ 
+     }
+ 
++    @SuppressLint("SetTextI18n")
+     override fun onCreateView(
+         inflater: LayoutInflater, container: ViewGroup?,
+         savedInstanceState: Bundle?
+     ): View? {
+ 
+ 
++        binding.textViewTitle.text = cocktailViewModel.title
++        binding.tvIngredient1.text = "* ${cocktailViewModel.ingredient1}\n * ${cocktailViewModel.ingredient2}"
++        binding.tvInstructions.text = cocktailViewModel.instructions
++        Picasso.get().load(cocktailViewModel.image).into(binding.imageViewDetail)
++
++
+ 
+ 
+ 
+Index: app/src/main/res/layout/fragment_details.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".view.DetailsFragment\">\n\n    <!-- TODO: Update blank fragment layout -->\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:text=\"@string/hello_blank_fragment\" />\n\n</FrameLayout>
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_details.xml b/app/src/main/res/layout/fragment_details.xml
+--- a/app/src/main/res/layout/fragment_details.xml	
++++ b/app/src/main/res/layout/fragment_details.xml	
+@@ -1,14 +1,78 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context=".view.DetailsFragment">
+ 
+-    <!-- TODO: Update blank fragment layout -->
++
++    <TextView
++        android:id="@+id/textViewTitle"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="5dp"
++        android:gravity="center"
++        android:text="@string/tequila"
++        android:textColor="@color/black"
++        android:textSize="35sp"
++        android:textStyle="bold"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <ImageView
++        android:id="@+id/imageViewDetail"
++        android:layout_width="300dp"
++        android:layout_height="300dp"
++        android:layout_gravity="center"
++        android:layout_marginTop="10dp"
++        android:background="@mipmap/ic_launcher"
++        android:contentDescription="@string/app_name"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.496"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
++
++
++    <TextView
++        android:id="@+id/tv_instructions"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="20dp"
++        android:text="@string/ing"
++        android:textAlignment="center"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/imageViewDetail" />
++
++
+     <TextView
++        android:id="@+id/ing"
+         android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:text="@string/hello_blank_fragment" />
++        android:layout_height="wrap_content"
++        android:layout_marginTop="20dp"
++        android:gravity="center"
++        android:text="@string/ingredients"
++        android:textColor="@color/brown"
++        android:textSize="20sp"
++        android:textStyle="bold"
++        app:layout_constraintBottom_toTopOf="@id/tv_ingredient1"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/tv_instructions" />
++
++    <TextView
++        android:id="@+id/tv_ingredient1"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="@string/tequila_blanco_cristalino"
++        android:textAlignment="center"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/ing" />
++
+ 
+-</FrameLayout>
+\ No newline at end of file
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/navigation/bottom_navigation.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<navigation xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:id=\"@+id/bottomNavigationView\"\n    app:startDestination=\"@id/home\">\n\n    <fragment\n        android:id=\"@+id/home\"\n        android:name=\"com.example.cocktailapp.view.HomeFragment\"\n        android:label=\"Home\"\n        tools:layout=\"@layout/fragment_view\">\n\n\n        <action\n            android:id=\"@+id/action_home_to_details\"\n            app:destination=\"@id/details\" />\n    </fragment>\n\n    <fragment\n        android:id=\"@+id/favorites\"\n        android:name=\"com.example.cocktailapp.view.FavoritesFragment\"\n        android:label=\"Favorites\"\n        tools:layout=\"@layout/fragment_view\">\n\n        <action\n            android:id=\"@+id/action_favorites_to_details\"\n            app:destination=\"@id/details\" />\n    </fragment>\n\n    <fragment\n        android:id=\"@+id/details\"\n        android:name=\"com.example.cocktailapp.view.DetailsFragment\"\n        android:label=\"Details\"\n        tools:layout=\"@layout/fragment_details\" />\n\n</navigation>
+===================================================================
+diff --git a/app/src/main/res/navigation/bottom_navigation.xml b/app/src/main/res/navigation/bottom_navigation.xml
+--- a/app/src/main/res/navigation/bottom_navigation.xml	
++++ b/app/src/main/res/navigation/bottom_navigation.xml	
+@@ -14,7 +14,11 @@
+ 
+         <action
+             android:id="@+id/action_home_to_details"
+-            app:destination="@id/details" />
++            app:destination="@id/details"
++            app:enterAnim="@android:anim/slide_in_left"
++            app:exitAnim="@anim/nav_default_exit_anim"
++            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
++            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+     </fragment>
+ 
+     <fragment
+Index: app/src/main/res/layout/fragment_view.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:id=\"@+id/swipeRefresh\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\">\n\n    <FrameLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        tools:context=\".view.ClassicFragment\">\n\n        <ProgressBar\n            android:id=\"@+id/progress\"\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:layout_gravity=\"center\"\n            android:visibility=\"gone\" />\n\n        <androidx.recyclerview.widget.RecyclerView\n            android:id=\"@+id/recycler_cocktails\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\">\n\n        </androidx.recyclerview.widget.RecyclerView>\n\n\n    </FrameLayout>\n\n</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_view.xml b/app/src/main/res/layout/fragment_view.xml
+--- a/app/src/main/res/layout/fragment_view.xml	
++++ b/app/src/main/res/layout/fragment_view.xml	
+@@ -3,7 +3,8 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/swipeRefresh"
+     android:layout_width="match_parent"
+-    android:layout_height="match_parent">
++    android:layout_height="match_parent"
++    >
+ 
+     <FrameLayout
+         android:layout_width="match_parent"
+Index: app/src/main/java/com/example/cocktailapp/view/HomeFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cocktailapp.view\n\nimport android.os.Bundle\nimport android.util.Log\nimport androidx.fragment.app.Fragment\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport androidx.navigation.Navigation.findNavController\nimport androidx.recyclerview.widget.LinearLayoutManager\nimport com.example.cocktailapp.R\nimport com.example.cocktailapp.adapter.CocktailAdapter\nimport com.example.cocktailapp.databinding.FragmentViewBinding\nimport com.example.cocktailapp.model.CocktailModel\nimport com.example.cocktailapp.utils.UIState\nimport dagger.hilt.android.AndroidEntryPoint\n\nprivate const val TAG = \"HomeFragment\"\n\n@AndroidEntryPoint\nclass HomeFragment : BaseFragment() {\n\n    private val binding: FragmentViewBinding by lazy {\n        FragmentViewBinding.inflate(layoutInflater)\n    }\n\n    private val cocktailAdapter by lazy {\n        CocktailAdapter {\n\n        }\n    }\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n\n    }\n\n    override fun onCreateView(\n        inflater: LayoutInflater, container: ViewGroup?,\n        savedInstanceState: Bundle?\n    ): View? {\n\n        binding.recyclerCocktails.apply {\n            //RecyclerView\n            layoutManager = LinearLayoutManager(\n                requireContext(),\n                LinearLayoutManager.VERTICAL,\n                false\n            )\n\n            adapter = cocktailAdapter\n\n        }\n\n        getSongsClassic()\n\n        // Inflate the layout for this fragment\n        return binding.root\n    }\n\n\n    private fun getSongsClassic() {\n        //ViewModel here\n        cocktailViewModel.drink.observe(viewLifecycleOwner) { state ->\n            when (state) {\n                is UIState.LOADING -> {\n                }\n                is UIState.SUCCESS<CocktailModel> -> {\n                    Log.d(TAG, \"onCreateView: ${state.response}\")\n                    cocktailAdapter.updateItems(\n                        state.response.drinks ?: emptyList(),\n                        requireContext()\n                    )\n                }\n                is UIState.ERROR -> {\n                    state.error.localizedMessage?.let {\n                        showError(it) {\n\n                        }\n                    }\n                }\n            }\n        }\n    }\n\n}
+===================================================================
+diff --git a/app/src/main/java/com/example/cocktailapp/view/HomeFragment.kt b/app/src/main/java/com/example/cocktailapp/view/HomeFragment.kt
+--- a/app/src/main/java/com/example/cocktailapp/view/HomeFragment.kt	
++++ b/app/src/main/java/com/example/cocktailapp/view/HomeFragment.kt	
+@@ -7,6 +7,7 @@
+ import android.view.View
+ import android.view.ViewGroup
+ import androidx.navigation.Navigation.findNavController
++import androidx.navigation.fragment.findNavController
+ import androidx.recyclerview.widget.LinearLayoutManager
+ import com.example.cocktailapp.R
+ import com.example.cocktailapp.adapter.CocktailAdapter
+@@ -26,6 +27,13 @@
+ 
+     private val cocktailAdapter by lazy {
+         CocktailAdapter {
++            cocktailViewModel.image = it.strDrinkThumb.toString()
++            cocktailViewModel.title = it.strDrink.toString()
++            cocktailViewModel.instructions = it.strInstructions.toString()
++            cocktailViewModel.ingredient1 = it.strIngredient1.toString()
++            cocktailViewModel.ingredient2 = it.strIngredient2.toString()
++            findNavController().navigate(R.id.action_home_to_details)
++
+ 
+         }
+     }
+Index: app/src/main/res/layout/cocktail_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.cardview.widget.CardView xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"250dp\"\n    android:layout_marginStart=\"15dp\"\n    android:layout_marginTop=\"10dp\"\n    android:layout_marginEnd=\"15dp\"\n    android:elevation=\"10dp\"\n    android:padding=\"5dp\"\n    app:cardCornerRadius=\"10dp\">\n\n        <RelativeLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\"\n            android:orientation=\"vertical\">\n\n\n            <ImageView\n                android:id=\"@+id/imageCocktail\"\n                android:layout_width=\"match_parent\"\n                android:layout_height=\"match_parent\"\n                android:layout_gravity=\"center\"\n                android:adjustViewBounds=\"false\"\n                android:contentDescription=\"@string/cocktailimage\"\n                android:scaleType=\"centerCrop\"\n                android:src=\"@color/black\" />\n\n            <TextView\n                android:id=\"@+id/tvCocktailName\"\n                android:layout_width=\"match_parent\"\n                android:layout_height=\"wrap_content\"\n                android:layout_above=\"@+id/tvIngredient\"\n                android:gravity=\"start\"\n                android:layout_marginStart=\"10dp\"\n                android:text=\"@string/tequila\"\n                android:textColor=\"@color/white\"\n                android:textSize=\"25sp\"\n                android:textStyle=\"bold\" />\n\n            <TextView\n                android:id=\"@+id/tvIngredient\"\n                android:layout_width=\"match_parent\"\n                android:layout_height=\"wrap_content\"\n                android:layout_alignParentStart=\"true\"\n                android:layout_alignParentBottom=\"true\"\n                android:gravity=\"start\"\n                android:textStyle=\"bold\"\n                android:layout_marginBottom=\"5dp\"\n                android:layout_marginStart=\"10dp\"\n                android:text=\"@string/tequila_blanco_cristalino\"\n                android:textColor=\"@color/white\" />\n\n\n        </RelativeLayout>\n\n\n</androidx.cardview.widget.CardView>
+===================================================================
+diff --git a/app/src/main/res/layout/cocktail_item.xml b/app/src/main/res/layout/cocktail_item.xml
+--- a/app/src/main/res/layout/cocktail_item.xml	
++++ b/app/src/main/res/layout/cocktail_item.xml	
+@@ -2,11 +2,11 @@
+ <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_width="match_parent"
+-    android:layout_height="250dp"
++    android:layout_height="270dp"
+     android:layout_marginStart="15dp"
+     android:layout_marginTop="10dp"
+     android:layout_marginEnd="15dp"
+-    android:elevation="10dp"
++    android:elevation="20dp"
+     android:padding="5dp"
+     app:cardCornerRadius="10dp">
+ 
+@@ -24,7 +24,7 @@
+                 android:adjustViewBounds="false"
+                 android:contentDescription="@string/cocktailimage"
+                 android:scaleType="centerCrop"
+-                android:src="@color/black" />
++                android:src="@drawable/ic_launcher_background" />
+ 
+             <TextView
+                 android:id="@+id/tvCocktailName"
+@@ -35,7 +35,7 @@
+                 android:layout_marginStart="10dp"
+                 android:text="@string/tequila"
+                 android:textColor="@color/white"
+-                android:textSize="25sp"
++                android:textSize="35sp"
+                 android:textStyle="bold" />
+ 
+             <TextView
+@@ -45,9 +45,10 @@
+                 android:layout_alignParentStart="true"
+                 android:layout_alignParentBottom="true"
+                 android:gravity="start"
+-                android:textStyle="bold"
++                android:textSize="20sp"
+                 android:layout_marginBottom="5dp"
+                 android:layout_marginStart="10dp"
++                android:textStyle="bold"
+                 android:text="@string/tequila_blanco_cristalino"
+                 android:textColor="@color/white" />
+ 

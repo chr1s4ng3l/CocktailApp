@@ -17,8 +17,11 @@ class CocktailsViewModel @Inject constructor(private val coRepo: CocktailReposit
     ViewModel() {
 
 
-    var instructions = ""
-    var ingredints = ""
+    var instructions1 = ""
+    var title = ""
+    var ingredient1 = ""
+    var ingredient2 = ""
+    var ingredient3 = ""
     var image = ""
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     private val _drink: MutableLiveData<UIState<CocktailModel>> = MutableLiveData(UIState.LOADING)

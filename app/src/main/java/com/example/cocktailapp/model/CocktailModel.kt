@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class CocktailModel(
     @SerializedName("drinks")
-    val drinks: List<Drink?>? = null
+    val drinks: List<Drink>? = null
 )

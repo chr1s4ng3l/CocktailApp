@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomNavigationView"
+    app:startDestination="@id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.example.cocktailapp.view.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_view">
+
+
+        <action
+            android:id="@+id/action_home_to_details"
+            app:destination="@id/details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favorites"
+        android:name="com.example.cocktailapp.view.FavoritesFragment"
+        android:label="Favorites"
+        tools:layout="@layout/fragment_view">
+
+        <action
+            android:id="@+id/action_favorites_to_details"
+            app:destination="@id/details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/details"
+        android:name="com.example.cocktailapp.view.DetailsFragment"
+        android:label="Details"
+        tools:layout="@layout/fragment_details" />
+
+</navigation>

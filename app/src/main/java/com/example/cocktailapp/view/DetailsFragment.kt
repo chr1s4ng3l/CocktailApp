@@ -2,16 +2,19 @@ package com.example.cocktailapp.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.FragmentDetailsBinding
+import com.example.cocktailapp.model.CocktailModel
+import com.example.cocktailapp.utils.UIState
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
-
+private const val TAG = "Hola"
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment() {
 
@@ -30,12 +33,33 @@ class DetailsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        binding.circleImageBack.setOnClickListener{
+            activity?.onBackPressed()
+        }
 
         binding.textViewTitle.text = cocktailViewModel.title
-        binding.tvIngredient.text =
-            "* ${cocktailViewModel.ingredient1}\n * ${cocktailViewModel.ingredient2}"
-        binding.tvInstructions.text = cocktailViewModel.instructions1
         Picasso.get().load(cocktailViewModel.image).into(binding.imageViewDetails)
+
+        cocktailViewModel.drinkId.observe(viewLifecycleOwner){
+            when (it) {
+                is UIState.LOADING -> {
+                }
+                is UIState.SUCCESS<CocktailModel> -> {
+                    Log.d(TAG, "onCreateView: ${it.response.drinks}")
+                }
+                is UIState.ERROR -> {
+                    it.error.localizedMessage?.let {
+                        showError(it) {
+
+
+                        }
+                    }
+                }
+            }
+
+        }
+        
+        
 
 
         // Inflate the layout for this fragment

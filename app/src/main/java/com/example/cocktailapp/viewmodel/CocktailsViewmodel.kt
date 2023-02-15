@@ -16,33 +16,53 @@ import javax.inject.Inject
 class CocktailsViewModel @Inject constructor(private val coRepo: CocktailRepositoryImp) :
     ViewModel() {
 
-
-    var instructions1 = ""
     var title = ""
-    var ingredient1 = ""
-    var ingredient2 = ""
-    var ingredient3 = ""
     var image = ""
+    var id = ""
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     private val _drink: MutableLiveData<UIState<CocktailModel>> = MutableLiveData(UIState.LOADING)
     val drink: MutableLiveData<UIState<CocktailModel>> get() = _drink
 
+    private val _drinkId: MutableLiveData<UIState<CocktailModel>> = MutableLiveData(UIState.LOADING)
+    val drinkId: MutableLiveData<UIState<CocktailModel>> get() = _drinkId
+    var isLoading = MutableLiveData<Boolean>()
 
 
     init {
         getAllDrinks()
+       // getAllDrinksById(id)
+      //  getAllDrinksBySearch(title)
     }
 
 
     private fun getAllDrinks() {
-                viewModelScope.launch(ioDispatcher) {
-                    coRepo.getListCocktails().collect() {
-                        _drink.postValue(it)
+        isLoading.postValue(true)
+        viewModelScope.launch(ioDispatcher) {
+            coRepo.getListCocktails().collect() {
+                _drink.postValue(it)
 
-                        }
-                    }
-                }
+            }
+        }
+    }
 
+
+    private fun getAllDrinksById(id: String) {
+        viewModelScope.launch(ioDispatcher) {
+            coRepo.getListCocktailsById(id).collect() {
+                _drinkId.postValue(it)
+
+            }
+        }
+    }
+
+    private fun getAllDrinksBySearch(query: String) {
+        viewModelScope.launch(ioDispatcher) {
+            coRepo.getListCocktailsByName(query).collect() {
+                _drink.postValue(it)
+
+            }
+        }
+    }
 
 
 }

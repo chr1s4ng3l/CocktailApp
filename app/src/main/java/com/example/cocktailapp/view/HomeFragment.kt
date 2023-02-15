@@ -2,11 +2,11 @@ package com.example.cocktailapp.view
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation.findNavController
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cocktailapp.R
@@ -15,6 +15,7 @@ import com.example.cocktailapp.databinding.FragmentViewBinding
 import com.example.cocktailapp.model.CocktailModel
 import com.example.cocktailapp.utils.UIState
 import dagger.hilt.android.AndroidEntryPoint
+
 
 private const val TAG = "HomeFragment"
 
@@ -30,13 +31,10 @@ class HomeFragment : BaseFragment() {
 
             cocktailViewModel.title = it.strDrink.toString()
             cocktailViewModel.image = it.strDrinkThumb.toString()
-            cocktailViewModel.ingredient1 = it.strIngredient1.toString()
-            cocktailViewModel.ingredient2 = it.strIngredient2.toString()
-            cocktailViewModel.ingredient3 = it.strIngredient3.toString()
-            cocktailViewModel.instructions1 = it.strInstructions.toString()
+            cocktailViewModel.id = it.idDrink.toString()
+            Toast.makeText(requireContext(), it.idDrink.toString(), Toast.LENGTH_LONG).show()
             cocktailViewModel.title = it.strDrink.toString()
-
-          findNavController().navigate(R.id.action_home_to_details)
+            findNavController().navigate(R.id.action_home_to_details)
         }
     }
 
@@ -50,7 +48,18 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+
+        //Swipe Refresh
+        binding.swipeRefresh.setOnRefreshListener {
+            cocktailViewModel.isLoading.postValue(false)
+            getSongsClassic()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
         binding.recyclerCocktails.apply {
+
+
+
             //RecyclerView
             layoutManager = LinearLayoutManager(
                 requireContext(),
@@ -64,26 +73,33 @@ class HomeFragment : BaseFragment() {
 
         getSongsClassic()
 
+        cocktailViewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.progress.isVisible = it
+        }
+
         // Inflate the layout for this fragment
         return binding.root
     }
-
 
     private fun getSongsClassic() {
         //ViewModel here
         cocktailViewModel.drink.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UIState.LOADING -> {
+                    cocktailViewModel.isLoading.postValue(true)
                 }
                 is UIState.SUCCESS<CocktailModel> -> {
+                    cocktailViewModel.isLoading.postValue(false)
                     Log.d(TAG, "onCreateView: ${state.response}")
                     cocktailAdapter.updateItems(
                         state.response.drinks ?: emptyList()
                     )
                 }
                 is UIState.ERROR -> {
+                    cocktailViewModel.isLoading.postValue(false)
                     state.error.localizedMessage?.let {
                         showError(it) {
+
 
                         }
                     }
@@ -91,5 +107,6 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+
 
 }

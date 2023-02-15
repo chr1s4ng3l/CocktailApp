@@ -10,6 +10,12 @@
         android:layout_height="match_parent"
         tools:context=".view.ClassicFragment">
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
@@ -20,9 +26,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_cocktails"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_marginTop="45dp"
+            android:layout_height="match_parent"/>
 
 
     </FrameLayout>

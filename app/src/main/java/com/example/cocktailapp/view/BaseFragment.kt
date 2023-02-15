@@ -21,6 +21,7 @@ open class BaseFragment: Fragment() {
 
 
     protected fun showError(message: String, action: () -> Unit) {
+        cocktailViewModel.isLoading.postValue(false)
         AlertDialog.Builder(requireActivity())
             .setTitle("Error Occurred")
             .setMessage(message)

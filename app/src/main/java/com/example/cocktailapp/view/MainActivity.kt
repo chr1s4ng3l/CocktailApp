@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,16 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         val navHost =
             supportFragmentManager.findFragmentById(R.id.frag_container) as NavHostFragment
-        setupActionBarWithNavController(navHost.navController)
+
+        binding.bottomNavigationView.setupWithNavController(navHost.navController)
 
 
-    }
-
-
-    //Navigate between fragment with the arrow
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.frag_container)
-        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
 }

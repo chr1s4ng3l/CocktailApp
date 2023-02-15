@@ -50,7 +50,6 @@ class CocktailViewHolder(private val binding: CocktailItemBinding) :
 
 
         binding.tvCocktailName.text = item.strDrink
-        binding.tvIngredient.text = item.strIngredient1
         Picasso.get().load(item.strDrinkThumb).into(binding.imageCocktail)
 
         itemView.setOnClickListener {

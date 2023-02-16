@@ -1,11 +1,17 @@
 package com.example.cocktailapp.view
 
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,12 +21,13 @@ import com.example.cocktailapp.databinding.FragmentViewBinding
 import com.example.cocktailapp.model.CocktailModel
 import com.example.cocktailapp.utils.UIState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_view.*
 
 
 private const val TAG = "HomeFragment"
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
     private val binding: FragmentViewBinding by lazy {
         FragmentViewBinding.inflate(layoutInflater)
@@ -29,11 +36,7 @@ class HomeFragment : BaseFragment() {
     private val cocktailAdapter by lazy {
         CocktailAdapter {
 
-            cocktailViewModel.title = it.strDrink.toString()
-            cocktailViewModel.image = it.strDrinkThumb.toString()
             cocktailViewModel.id = it.idDrink.toString()
-            Toast.makeText(requireContext(), it.idDrink.toString(), Toast.LENGTH_LONG).show()
-            cocktailViewModel.title = it.strDrink.toString()
             findNavController().navigate(R.id.action_home_to_details)
         }
     }
@@ -48,17 +51,16 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        binding.searchView.setOnQueryTextListener(this)
 
         //Swipe Refresh
         binding.swipeRefresh.setOnRefreshListener {
             cocktailViewModel.isLoading.postValue(false)
-            getSongsClassic()
+            getCocktailsRandom()
             binding.swipeRefresh.isRefreshing = false
         }
 
         binding.recyclerCocktails.apply {
-
-
 
             //RecyclerView
             layoutManager = LinearLayoutManager(
@@ -71,7 +73,8 @@ class HomeFragment : BaseFragment() {
 
         }
 
-        getSongsClassic()
+        getCocktailsRandom()
+        getCocktailsByName()
 
         cocktailViewModel.isLoading.observe(viewLifecycleOwner) {
             binding.progress.isVisible = it
@@ -81,7 +84,7 @@ class HomeFragment : BaseFragment() {
         return binding.root
     }
 
-    private fun getSongsClassic() {
+    private fun getCocktailsRandom() {
         //ViewModel here
         cocktailViewModel.drink.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -106,6 +109,64 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
+
+    }
+
+
+    private fun getCocktailsByName() {
+        //ViewModel here
+        cocktailViewModel.drinkByName.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UIState.LOADING -> {
+                    cocktailViewModel.isLoading.postValue(true)
+                }
+                is UIState.SUCCESS<CocktailModel> -> {
+                    cocktailViewModel.isLoading.postValue(false)
+                    Log.d(TAG, "onCreateView: ${state.response}")
+                    cocktailAdapter.updateItems(
+                        state.response.drinks ?: emptyList()
+                    )
+                }
+                is UIState.ERROR -> {
+                    cocktailViewModel.isLoading.postValue(false)
+                    state.error.localizedMessage?.let {
+                        showError(it) {
+
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    private fun hideKeyboard() {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0)
+    }
+
+    private fun searchByName(query: String) {
+        cocktailViewModel.getAllDrinksBySearch(query)
+        hideKeyboard()
+
+    }
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (!query.isNullOrEmpty()) {
+            searchByName(query)
+            Toast.makeText(requireContext(), "$query", Toast.LENGTH_LONG).show()
+        }
+
+        return true
+    }
+
+
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+
+
+        return true
     }
 
 

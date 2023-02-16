@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.FragmentViewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,8 @@ class FavoritesFragment : Fragment() {
     ): View? {
 
 
+        //Hide searchView
+        binding.searchView.isGone = true
 
 
 

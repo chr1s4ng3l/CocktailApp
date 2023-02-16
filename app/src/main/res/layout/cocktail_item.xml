@@ -24,8 +24,7 @@
                 android:adjustViewBounds="false"
                 android:contentDescription="@string/cocktailimage"
                 android:scaleType="centerCrop"
-                android:src="@color/black"
-                android:alpha="0.9"/>
+                android:src="@color/black" />
 
             <TextView
                 android:id="@+id/tvCocktailName"

@@ -2,6 +2,7 @@ package com.example.cocktailapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+
+        //Navigation
         val navHost =
             supportFragmentManager.findFragmentById(R.id.frag_container) as NavHostFragment
 
@@ -29,5 +32,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
 
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.FragmentDetailsBinding
 import com.example.cocktailapp.model.CocktailModel
+import com.example.cocktailapp.model.Drink
 import com.example.cocktailapp.utils.UIState
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,15 +38,23 @@ class DetailsFragment : BaseFragment() {
             activity?.onBackPressed()
         }
 
-        binding.textViewTitle.text = cocktailViewModel.title
-        Picasso.get().load(cocktailViewModel.image).into(binding.imageViewDetails)
+        cocktailViewModel.getAllDrinksById(cocktailViewModel.id)
 
         cocktailViewModel.drinkId.observe(viewLifecycleOwner){
             when (it) {
                 is UIState.LOADING -> {
                 }
                 is UIState.SUCCESS<CocktailModel> -> {
-                    Log.d(TAG, "onCreateView: ${it.response.drinks}")
+                    Log.d(TAG, "onCreateView AAA: ${it.response.drinks}")
+                    val list = it.response.drinks
+                    list?.forEach { drink ->
+                        binding.tvIngredient.text = "* ${drink.strIngredient1}\n * ${drink.strIngredient2}"
+                        binding.tvInstructions.text = drink.strInstructions.toString()
+                        binding.textViewTitle.text = drink.strDrink.toString()
+                        Picasso.get().load(drink.strDrinkThumb).into(binding.imageViewDetails)
+
+                    }
+
                 }
                 is UIState.ERROR -> {
                     it.error.localizedMessage?.let {
@@ -58,8 +67,10 @@ class DetailsFragment : BaseFragment() {
             }
 
         }
-        
-        
+
+
+
+
 
 
         // Inflate the layout for this fragment

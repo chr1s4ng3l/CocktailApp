@@ -16,8 +16,6 @@ import javax.inject.Inject
 class CocktailsViewModel @Inject constructor(private val coRepo: CocktailRepositoryImp) :
     ViewModel() {
 
-    var title = ""
-    var image = ""
     var id = ""
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     private val _drink: MutableLiveData<UIState<CocktailModel>> = MutableLiveData(UIState.LOADING)
@@ -25,13 +23,16 @@ class CocktailsViewModel @Inject constructor(private val coRepo: CocktailReposit
 
     private val _drinkId: MutableLiveData<UIState<CocktailModel>> = MutableLiveData(UIState.LOADING)
     val drinkId: MutableLiveData<UIState<CocktailModel>> get() = _drinkId
+
+    private val _drinkByName: MutableLiveData<UIState<CocktailModel>> = MutableLiveData(UIState.LOADING)
+    val drinkByName: MutableLiveData<UIState<CocktailModel>> get() = _drinkByName
     var isLoading = MutableLiveData<Boolean>()
 
 
     init {
         getAllDrinks()
-       // getAllDrinksById(id)
-      //  getAllDrinksBySearch(title)
+        getAllDrinksById()
+        getAllDrinksBySearch()
     }
 
 
@@ -46,22 +47,29 @@ class CocktailsViewModel @Inject constructor(private val coRepo: CocktailReposit
     }
 
 
-    private fun getAllDrinksById(id: String) {
-        viewModelScope.launch(ioDispatcher) {
-            coRepo.getListCocktailsById(id).collect() {
-                _drinkId.postValue(it)
+    fun getAllDrinksById(id: String? = null) {
+        id?.let { id ->
+            viewModelScope.launch(ioDispatcher) {
+                coRepo.getListCocktailsById(id).collect() {
+                    _drinkId.postValue(it)
 
+                }
             }
         }
+
     }
 
-    private fun getAllDrinksBySearch(query: String) {
-        viewModelScope.launch(ioDispatcher) {
-            coRepo.getListCocktailsByName(query).collect() {
-                _drink.postValue(it)
+     fun getAllDrinksBySearch(query: String? = null) {
+        query?.let {
+            viewModelScope.launch(ioDispatcher) {
+                coRepo.getListCocktailsByName(query).collect() {
+                    _drinkByName.postValue(it)
 
+                }
             }
+
         }
+
     }
 
 
